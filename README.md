@@ -39,5 +39,6 @@ Connect to and enter docker container
 
 You'll need your expo login credentials to do this.
 ```
+dev> npm install
 dev> exp start
 ```
