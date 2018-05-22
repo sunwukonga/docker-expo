@@ -21,7 +21,7 @@ RUN apt-get update -q && \
 
 
 # Install EXPO
-RUN npm install exp --global
+RUN npm install -g exp
 
 ## Clean up when done
 RUN apt-get clean && \
