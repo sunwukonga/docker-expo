@@ -1,23 +1,25 @@
 # Docker image for react native.
 
-FROM node:6
+FROM node:8
 
 ENV maintainer="Paul Desmond Parker"
-
 
 # Setup environment variables
 ENV PATH $PATH:node_modules/.bin
 
 # Install add-apt-repository
 # RUN apt-get install -q software-properties-common python-software-properties
-RUN echo "deb http://http.debian.net/debian jessie-backports main" | \
-      tee --append /etc/apt/sources.list.d/jessie-backports.list > /dev/null
 
 # Install Java
-# RUN add-apt-repository ppa:openjdk-r/ppa -q && \
-RUN apt-get update -q && \
-    apt-get install -qy --no-install-recommends python-dev && \
-    apt-get install -qy --no-install-recommends -t jessie-backports openjdk-8-jdk
+RUN dpkg --add-architecture i386 && \
+    echo "deb http://http.debian.net/debian stretch-backports main" | \
+      tee --append /etc/apt/sources.list.d/stretch-backports.list > /dev/null && \
+    apt-get update && \
+    apt-get install -qy --no-install-recommends -t stretch-backports openjdk-8-jdk && \
+    apt-get install -y libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 unzip && \
+    apt-get -y autoremove
+
+#RUN apt-get install -qy --no-install-recommends python-dev && \
 
 
 # Install EXPO
@@ -26,7 +28,7 @@ RUN npm install -g expo-cli
 ## Clean up when done
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    npm cache clean
+    npm cache verify
 
 # Default react-native web server port
 EXPOSE 8081
